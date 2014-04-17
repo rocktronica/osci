@@ -9,8 +9,10 @@ var keydown = function(e) {
         oscis[e.which] = oscis[e.which] || new Osci();
         currentKeyIndex = KEY_TO_INDEX[e.which];
         oscis[e.which].playFrequency(notes[octave * 12 + currentKeyIndex]);
-    } else if (e.which >= 48 && e.which <= 57) {
-        octave = e.which - 48;
+    } else if (e.which === 38) {
+        octave++;
+    } else if (e.which === 40) {
+        octave--;
     }
 
 };
