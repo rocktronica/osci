@@ -2,14 +2,15 @@ var Osci = (function(){
     var context = new webkitAudioContext();
 
     var oscillator = context.createOscillator();
-    oscillator.connect(context.destination);
+    oscillator.start(0);
 
     window.oscillator = oscillator;
 
     var klass = function() {
         console.log("init", this);
+        this.isConnected = false;
 
-        this.setWaveType("sine");
+        this.setWaveType("square");
     }
 
     klass.fn = klass.prototype;
@@ -30,6 +31,7 @@ var Osci = (function(){
     };
 
     klass.fn.playFrequency = function(frequency) {
+        if (!frequency) { return this; }
         this.play();
         oscillator.frequency.value = frequency;
         console.log("frequency", frequency);
@@ -39,19 +41,17 @@ var Osci = (function(){
         return oscillator.frequency.value;
     };
 
-    klass.fn.isPlaying = function() {
-        return oscillator.playbackState !== 2;
-    };
-
     klass.fn.play = function() {
-        if (!this.isPlaying()) {
-            oscillator.start(0);
+        if (!this.isConnected) {
+            oscillator.connect(context.destination);
+            this.isConnected = true;
         }
         return this;
     };
     klass.fn.stop = function() {
-        if (this.isPlaying()) {
-            oscillator.stop(0);
+        if (this.isConnected) {
+            oscillator.disconnect(context.destination);
+            this.isConnected = false;
         }
         return this;
     };
