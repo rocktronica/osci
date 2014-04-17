@@ -1,25 +1,24 @@
 var Osci = (function(){
     var context = new webkitAudioContext();
 
-    var oscillator = context.createOscillator();
-    oscillator.start(0);
-
-    window.oscillator = oscillator;
-
     var klass = function() {
         console.log("init", this);
+
         this.isConnected = false;
+
+        this.oscillator = context.createOscillator();
+        this.oscillator.start(0);
 
         this.setWaveType("square");
     }
 
     klass.fn = klass.prototype;
     klass.fn.setWaveType = function(waveType) {
-        oscillator.type = {
+        this.oscillator.type = {
             sine: 0,
             square: 1,
             triangle: 2
-        }[waveType.toLowerCase()] || oscillator.type;
+        }[waveType.toLowerCase()] || this.oscillator.type;
         return this;
     };
     klass.fn.getWaveType = function() {
@@ -27,30 +26,30 @@ var Osci = (function(){
             "sine",
             "square",
             "triangle"
-        ][oscillator.type];
+        ][this.oscillator.type];
     };
 
     klass.fn.playFrequency = function(frequency) {
         if (!frequency) { return this; }
         this.play();
-        oscillator.frequency.value = frequency;
+        this.oscillator.frequency.value = frequency;
         console.log("frequency", frequency);
         return this;
     };
     klass.fn.getFrequency = function() {
-        return oscillator.frequency.value;
+        return this.oscillator.frequency.value;
     };
 
     klass.fn.play = function() {
         if (!this.isConnected) {
-            oscillator.connect(context.destination);
+            this.oscillator.connect(context.destination);
             this.isConnected = true;
         }
         return this;
     };
     klass.fn.stop = function() {
         if (this.isConnected) {
-            oscillator.disconnect(context.destination);
+            this.oscillator.disconnect(context.destination);
             this.isConnected = false;
         }
         return this;
