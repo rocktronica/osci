@@ -2,8 +2,6 @@ var Osci = (function(){
     var context = new webkitAudioContext();
 
     var klass = function() {
-        console.log("init", this);
-
         this.isConnected = false;
 
         this.oscillator = context.createOscillator();
@@ -33,7 +31,6 @@ var Osci = (function(){
         if (!frequency) { return this; }
         this.play();
         this.oscillator.frequency.value = frequency;
-        console.log("frequency", frequency);
         return this;
     };
     klass.fn.getFrequency = function() {
