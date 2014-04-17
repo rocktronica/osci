@@ -5,6 +5,8 @@ var octave = 4;
 var currentKeyIndex;
 
 var keydown = function(e) {
+    if (e.repeat) { return; }
+
     if (e.which >= 48 && e.which <= 57) {
         octave = e.which - 48;
         console.log("octave", octave);
