@@ -12,15 +12,9 @@ var keydown = function(e) {
 
     if (KEY_TO_INDEX[e.which] !== undefined) {
         currentKeyIndex = KEY_TO_INDEX[e.which];
-        osci.setFrequency(notes[octave * 12 + currentKeyIndex]);
+        osci.playFrequency(notes[octave * 12 + currentKeyIndex]);
     }
 };
 
-// var keyup = function(e) {
-//     if (oscillator.playbackState === 2) {
-//         oscillator.noteOff(0);
-//     }
-// }
-
 document.addEventListener("keydown", keydown);
-// document.addEventListener("keyup", keyup);
+// document.addEventListener("keyup", osci.stop.bind(osci));

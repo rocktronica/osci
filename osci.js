@@ -4,6 +4,8 @@ var Osci = (function(){
     var oscillator = context.createOscillator();
     oscillator.connect(context.destination);
 
+    window.oscillator = oscillator;
+
     var klass = function() {
         console.log("init", this);
 
@@ -18,7 +20,7 @@ var Osci = (function(){
             triangle: 2
         }[waveType.toLowerCase()] || oscillator.type;
         return this;
-    }
+    };
     klass.fn.getWaveType = function() {
         return [
             "sine",
@@ -27,18 +29,32 @@ var Osci = (function(){
         ][oscillator.type];
     };
 
-    klass.fn.setFrequency = function(frequency) {
-        if (oscillator.playbackState !== 2) {
-            oscillator.noteOn(0);
-        }
-
+    klass.fn.playFrequency = function(frequency) {
+        this.play();
         oscillator.frequency.value = frequency;
         console.log("frequency", frequency);
         return this;
-    }
+    };
     klass.fn.getFrequency = function() {
         return oscillator.frequency.value;
-    }
+    };
+
+    klass.fn.isPlaying = function() {
+        return oscillator.playbackState !== 2;
+    };
+
+    klass.fn.play = function() {
+        if (!this.isPlaying()) {
+            oscillator.start(0);
+        }
+        return this;
+    };
+    klass.fn.stop = function() {
+        if (this.isPlaying()) {
+            oscillator.stop(0);
+        }
+        return this;
+    };
 
     return klass;
 }());

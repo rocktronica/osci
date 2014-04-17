@@ -27,11 +27,8 @@ var Osci = (function(){
         ][oscillator.type];
     };
 
-    klass.fn.setFrequency = function(frequency) {
-        if (oscillator.playbackState !== 2) {
-            oscillator.noteOn(0);
-        }
-
+    klass.fn.playFrequency = function(frequency) {
+        this.play();
         oscillator.frequency.value = frequency;
         console.log("frequency", frequency);
         return this;
@@ -39,6 +36,16 @@ var Osci = (function(){
     klass.fn.getFrequency = function() {
         return oscillator.frequency.value;
     }
+
+    klass.fn.play = function() {
+        if (oscillator.playbackState !== 2) {
+            oscillator.noteOn(0);
+        }
+        return this;
+    };
+    klass.fn.stop = function() {
+
+    };
 
     return klass;
 }());
