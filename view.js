@@ -39,7 +39,6 @@ var KEY_TO_INDEX = {
 };
 
 var octave = 4;
-var currentKeyIndex;
 var oscis = [];
 
 var frequencies = new Frequencies();
@@ -47,18 +46,28 @@ var frequencies = new Frequencies();
 var keydown = function(e) {
     if (e.repeat) { return; }
 
+    var changeInOctave = 0;
+    if (e.which === 38) {
+        changeInOctave = 1;
+    } else if (e.which === 40) {
+        changeInOctave = -1;
+    }
+    octave += changeInOctave;
+
     if (KEY_TO_INDEX[e.which] !== undefined) {
         oscis[e.which] = oscis[e.which] || new Osci();
-        currentKeyIndex = KEY_TO_INDEX[e.which];
-
-        var frequency = frequencies.at(octave * 12 + currentKeyIndex);
-        oscis[e.which].playFrequency(frequency);
-    } else if (e.which === 38) {
-        octave++;
-    } else if (e.which === 40) {
-        octave--;
+        oscis[e.which].playFrequency(
+            frequencies.at(octave * 12 + KEY_TO_INDEX[e.which])
+        );
     }
 
+    if (changeInOctave) {
+        oscis.forEach(function(osci, eWhich) {
+            osci.playFrequency(
+                frequencies.at(frequencies.indexOf(osci.getFrequency()) + (changeInOctave * 12))
+            )
+        });
+    }
 };
 
 var keyup = function(e) {

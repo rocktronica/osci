@@ -3,6 +3,7 @@ var Osci = (function(){
 
     var klass = function() {
         this.isConnected = false;
+        this.value; // oscillator.frequency.value may round
 
         this.oscillator = context.createOscillator();
         this.oscillator.start(0);
@@ -30,11 +31,11 @@ var Osci = (function(){
     klass.fn.playFrequency = function(frequency) {
         if (!frequency) { return this; }
         this.play();
-        this.oscillator.frequency.value = frequency;
+        this.value = this.oscillator.frequency.value = frequency;
         return this;
     };
     klass.fn.getFrequency = function() {
-        return this.oscillator.frequency.value;
+        return this.value;
     };
 
     klass.fn.play = function() {

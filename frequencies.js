@@ -131,5 +131,9 @@ var Frequencies = (function() {
         return values[i];
     }
 
+    klass.fn.indexOf = function(value) {
+        return values.indexOf(value);
+    }
+
     return klass;
 }());
