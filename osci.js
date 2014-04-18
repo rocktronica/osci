@@ -31,12 +31,28 @@ var Osci = (function(){
     klass.fn.playFrequency = function(frequency) {
         if (!frequency) { return this; }
         this.play();
-        this.value = this.oscillator.frequency.value = frequency;
+        this.setFrequency(frequency);
         return this;
     };
+    klass.fn.setFrequency = function(frequency) {
+        this.value = this.oscillator.frequency.value = frequency;
+    }
     klass.fn.getFrequency = function() {
         return this.value;
     };
+
+    klass.fn.changeOctave = function(change) {
+        if (change > 0) {
+            while (change--) {
+                this.setFrequency(this.getFrequency() * 2);
+            }
+        } else {
+            change *= -1;
+            while (change--) {
+                this.setFrequency(this.getFrequency() / 2);
+            }
+        }
+    }
 
     klass.fn.play = function() {
         if (!this.isConnected) {

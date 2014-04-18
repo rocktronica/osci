@@ -63,11 +63,7 @@ var keydown = function(e) {
 
     if (e.shiftKey) { changeInOctave = 1; }
     if (changeInOctave) {
-        oscis.forEach(function(osci, eWhich) {
-            osci.playFrequency(
-                frequencies.at(frequencies.indexOf(osci.getFrequency()) + (changeInOctave * 12))
-            )
-        });
+        oscis.forEach(function(osci) { osci.changeOctave(changeInOctave); });
     }
 };
 
@@ -79,11 +75,7 @@ var keyup = function(e) {
 
     // e.shiftKey is apparently unreliable for keyUp
     if (e.which === 16) {
-        oscis.forEach(function(osci, eWhich) {
-            osci.playFrequency(
-                frequencies.at(frequencies.indexOf(osci.getFrequency()) - 12)
-            )
-        });
+        oscis.forEach(function(osci) { osci.changeOctave(-1); });
     }
 }
 
