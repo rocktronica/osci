@@ -40,7 +40,9 @@ var KEY_TO_INDEX = {
 
 var octave = 4;
 var waveType = Osci.defaultWaveType;
-var oscis = [];
+
+var polyphonic = true,
+    oscis = [];
 
 var frequencies = new Frequencies();
 
@@ -67,11 +69,13 @@ var keydown = function(e) {
     }
     octave += changeInOctave;
 
+    var oscisIndex = polyphonic ? e.which : 0;
+
     if (KEY_TO_INDEX[e.which] !== undefined) {
-        oscis[e.which] = oscis[e.which] || new Osci({
+        oscis[oscisIndex] = oscis[oscisIndex] || new Osci({
             waveType: waveType
         });
-        oscis[e.which].playFrequency(
+        oscis[oscisIndex].playFrequency(
             frequencies.at(octave * 12 + KEY_TO_INDEX[e.which])
         );
     }
@@ -83,9 +87,11 @@ var keydown = function(e) {
 };
 
 var keyup = function(e) {
-    if (!!oscis[e.which]) {
-        oscis[e.which].stop();
-        delete oscis[e.which];
+    var oscisIndex = polyphonic ? e.which : 0;
+
+    if (!!oscis[oscisIndex]) {
+        oscis[oscisIndex].stop();
+        delete oscis[oscisIndex];
     }
 
     // e.shiftKey is apparently unreliable for keyUp
