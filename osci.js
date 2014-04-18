@@ -1,32 +1,34 @@
 var Osci = (function(){
     var context = new webkitAudioContext();
 
-    var klass = function() {
+    var klass = function(options) {
+        options = options || {};
+
         this.isConnected = false;
         this.value; // oscillator.frequency.value may round
 
         this.oscillator = context.createOscillator();
         this.oscillator.start(0);
 
-        this.setWaveType("square");
+        this.setWaveType(options.waveType || klass.fn.defaultWaveType);
     }
 
+    var possibleWaveTypes = ["sine", "square", "sawtooth", "triangle"];
+
     klass.fn = klass.prototype;
+    klass.fn.defaultWaveType = "square";
     klass.fn.setWaveType = function(waveType) {
-        this.oscillator.type = {
-            sine: 0,
-            square: 1,
-            triangle: 2
-        }[waveType.toLowerCase()] || this.oscillator.type;
+        // this.oscillator.type takes an int but turns into a string...
+        this.oscillator.type = possibleWaveTypes.indexOf(waveType.toLowerCase())
+            || this.oscillator.type;
         return this;
     };
     klass.fn.getWaveType = function() {
-        return [
-            "sine",
-            "square",
-            "triangle"
-        ][this.oscillator.type];
+        return this.oscillator.type;
     };
+    klass.fn.getAllPossibleWaveTypes = function() {
+        return possibleWaveTypes;
+    }
 
     klass.fn.playFrequency = function(frequency) {
         if (!frequency) { return this; }

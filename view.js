@@ -39,12 +39,25 @@ var KEY_TO_INDEX = {
 };
 
 var octave = 4;
+var waveType = Osci.defaultWaveType;
 var oscis = [];
 
 var frequencies = new Frequencies();
 
 var keydown = function(e) {
     if (e.repeat) { return; }
+
+     // tab to change wave type
+    if (e.which === 9) {
+        var allPossibleWaveTypes = Osci.fn.getAllPossibleWaveTypes();
+        waveType = allPossibleWaveTypes[allPossibleWaveTypes.indexOf(waveType) + 1]
+            || allPossibleWaveTypes[0];
+        oscis.forEach(function(osci) {
+            osci.setWaveType(waveType);
+        });
+        console.log("waveType", waveType);
+        e.preventDefault();
+    }
 
     var changeInOctave = 0;
     if (e.which === 38) {
@@ -55,7 +68,9 @@ var keydown = function(e) {
     octave += changeInOctave;
 
     if (KEY_TO_INDEX[e.which] !== undefined) {
-        oscis[e.which] = oscis[e.which] || new Osci();
+        oscis[e.which] = oscis[e.which] || new Osci({
+            waveType: waveType
+        });
         oscis[e.which].playFrequency(
             frequencies.at(octave * 12 + KEY_TO_INDEX[e.which])
         );
