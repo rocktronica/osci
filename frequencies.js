@@ -1,5 +1,5 @@
 var Frequencies = (function() {
-    var values = [
+    var originalFrequncies = [
         16.35,      // c0
         17.32,      // c#0/db0
         18.35,      // d0
@@ -110,6 +110,16 @@ var Frequencies = (function() {
         7902.13     // b8
     ];
 
+    var maxFrequncies = 200;
+    var jump = 1.05945945945946; // accurate?
+
+    var values = [16.35];  // c0
+
+    var i = 0;
+    while (i++ <= maxFrequncies) {
+        values.push(values[i-1] * jump);
+    }
+
     var klass = function() {
 
     };
@@ -117,6 +127,7 @@ var Frequencies = (function() {
     klass.fn = klass.prototype;
 
     klass.fn.at = function(i) {
+        console.log(values[i], originalFrequncies[i]);
         return values[i];
     }
 
