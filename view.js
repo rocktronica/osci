@@ -12,6 +12,18 @@ var keydown = function(e) {
 
     keys.down(e.which);
 
+    // Toggle poly vs mono w/ ~
+    if (e.which === 192) {
+        polyphonic = !polyphonic;
+
+        oscis.forEach(function(osci, oscisIndex) {
+            osci.stop();
+            delete oscis[oscisIndex];
+        });
+
+        return;
+    }
+
     // tab to change wave type
     if (e.which === 9) {
         var allPossibleWaveTypes = Osci.fn.getAllPossibleWaveTypes();
