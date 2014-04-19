@@ -88,3 +88,52 @@ var Osci = (function(){
 
     return klass;
 }());
+
+var OscisCollection = (function() {
+    var klass = function() {
+        this.oscis = [];
+    }
+
+    klass.fn = klass.prototype;
+
+    klass.fn.at = function(i) {
+        return this.oscis[i];
+    }
+
+    klass.fn.setAt = function(i, osci) {
+        this.oscis[i] = osci;
+    };
+
+    klass.fn.deleteAt = function(i) {
+        this.oscis[i].stop();
+        delete this.oscis[i];
+    }
+
+    klass.fn.forEach = function(fn) {
+        this.oscis.forEach(function(osci, index) {
+            fn.bind(osci)(osci, index);
+        })
+        return this;
+    };
+
+    klass.fn.setWaveType = function(waveType) {
+        this.forEach(function(osci) {
+            osci.setWaveType(waveType);
+        });
+        return this;
+    };
+
+    klass.fn.clear = function() {
+        this.forEach(function(osci, index) {
+            this.deleteAt(index);
+        }.bind(this));
+    }
+
+    klass.fn.changeOctave = function(change) {
+        this.forEach(function(osci) {
+            osci.changeOctave(change);
+        });
+    }
+
+    return klass;
+}());

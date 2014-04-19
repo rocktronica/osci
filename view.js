@@ -3,7 +3,7 @@ var waveType = Osci.defaultWaveType;
 
 var polyphonic = true,
     polyphonicGlissando = false,
-    oscis = [];
+    oscis = new OscisCollection();
 
 var frequencies = new Frequencies();
 var keys = new Keys();
@@ -15,12 +15,7 @@ var keydown = function(e) {
         // Toggle poly vs mono w/ ~
         if (!e.shiftKey) {
             polyphonic = !polyphonic;
-
-            oscis.forEach(function(osci, oscisIndex) {
-                osci.stop();
-                delete oscis[oscisIndex];
-            });
-
+            oscis.clear();
         // Toggle poly glissando with `
         } else {
             polyphonicGlissando = !polyphonicGlissando;
@@ -34,10 +29,7 @@ var keydown = function(e) {
         var allPossibleWaveTypes = Osci.fn.getAllPossibleWaveTypes();
         waveType = allPossibleWaveTypes[allPossibleWaveTypes.indexOf(waveType) + 1]
             || allPossibleWaveTypes[0];
-        oscis.forEach(function(osci) {
-            osci.setWaveType(waveType);
-        });
-        console.log("waveType", waveType);
+        oscis.setWaveType(waveType);
         e.preventDefault();
     }
 
@@ -52,19 +44,20 @@ var keydown = function(e) {
     var oscisIndex = polyphonic ? e.which : 0;
 
     if (keys.noteIndexAtKey(e.which) !== undefined) {
-        oscis[oscisIndex] = oscis[oscisIndex] || new Osci({
-            waveType: waveType
-        });
+        oscis.setAt(
+            oscisIndex,
+            oscis.at(oscisIndex) || new Osci({waveType: waveType})
+        );
 
         var delay = 0;
         if (polyphonicGlissando && keys.getLastPressed()) {
-            oscis[oscisIndex].setFrequency(
+            oscis.at(oscisIndex).setFrequency(
                 frequencies.at(octave * 12 + keys.noteIndexAtKey(keys.getLastPressed()))
             );
             delay = 10;
         }
 
-        oscis[oscisIndex]
+        oscis.at(oscisIndex)
             .setFrequency(
                 frequencies.at(octave * 12 + keys.noteIndexAtKey(e.which)),
                 delay
@@ -74,7 +67,7 @@ var keydown = function(e) {
 
     if (e.shiftKey) { changeInOctave = 1; }
     if (changeInOctave) {
-        oscis.forEach(function(osci) { osci.changeOctave(changeInOctave); });
+        oscis.changeOctave(changeInOctave);
     }
 
     keys.down(e.which);
@@ -85,17 +78,16 @@ var keyup = function(e) {
 
     var oscisIndex = polyphonic ? e.which : 0;
 
-    if (!!oscis[oscisIndex]) {
-        var osci = oscis[oscisIndex];
+    if (!!oscis.at(oscisIndex)) {
+        var osci = oscis.at(oscisIndex);
 
         if (polyphonic) {
-            osci.stop();
-            delete oscis[oscisIndex];
+            oscis.deleteAt(oscisIndex);
         } else {
             var lastPressedKey = keys.lastStillPressed();
 
             if (lastPressedKey) {
-                oscis[oscisIndex].playFrequency(
+                oscis.at(oscisIndex).playFrequency(
                     frequencies.at(octave * 12 + keys.noteIndexAtKey(lastPressedKey))
                 );
             } else {
@@ -106,7 +98,7 @@ var keyup = function(e) {
 
     // e.shiftKey is apparently unreliable for keyUp
     if (e.which === 16) {
-        oscis.forEach(function(osci) { osci.changeOctave(-1); });
+        oscis.changeOctave(-1);
     }
 }
 
