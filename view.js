@@ -10,7 +10,9 @@ var keys = new Keys();
 var keydown = function(e) {
     if (e.repeat) { return; }
 
-     // tab to change wave type
+    keys.down(e.which);
+
+    // tab to change wave type
     if (e.which === 9) {
         var allPossibleWaveTypes = Osci.fn.getAllPossibleWaveTypes();
         waveType = allPossibleWaveTypes[allPossibleWaveTypes.indexOf(waveType) + 1]
@@ -48,11 +50,27 @@ var keydown = function(e) {
 };
 
 var keyup = function(e) {
+    keys.up(e.which);
+
     var oscisIndex = polyphonic ? e.which : 0;
 
     if (!!oscis[oscisIndex]) {
-        oscis[oscisIndex].stop();
-        delete oscis[oscisIndex];
+        var osci = oscis[oscisIndex];
+
+        if (polyphonic) {
+            osci.stop();
+            delete oscis[oscisIndex];
+        } else {
+            var lastPressedKey = keys.last();
+
+            if (lastPressedKey) {
+                oscis[oscisIndex].playFrequency(
+                    frequencies.at(octave * 12 + keys.noteIndexAtKey(lastPressedKey))
+                );
+            } else {
+                osci.stop();
+            }
+        }
     }
 
     // e.shiftKey is apparently unreliable for keyUp

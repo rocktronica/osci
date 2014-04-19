@@ -40,12 +40,33 @@ var Keys = (function() {
     };
 
     var klass = function() {
-
+        this.pressed = [];
     };
 
     klass.fn = klass.prototype;
-    klass.fn.noteIndexAtKey = function(noteIndexAtKey) {
-        return KEY_TO_INDEX[noteIndexAtKey]
+
+    klass.fn.noteIndexAtKey = function(which) {
+        return KEY_TO_INDEX[which]
+    }
+
+    klass.fn.down = function(which) {
+        if (!this.isPressed(which)) {
+            this.pressed.push(which);
+        }
+        return this;
+    }
+
+    klass.fn.up = function(which) {
+        this.pressed.splice(this.pressed.indexOf(which), 1);
+        return this;
+    }
+
+    klass.fn.isPressed = function(which) {
+        return this.pressed.indexOf(which) !== -1;
+    }
+
+    klass.fn.last = function() {
+        return this.pressed[this.pressed.length - 1];
     }
 
     return klass;
