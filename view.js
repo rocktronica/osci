@@ -11,7 +11,7 @@ var keys = new Keys();
 var keydown = function(e) {
     if (e.repeat) { return; }
 
-    if (e.which === 192) {
+    if (e.which === keys.TILDE) {
         // Toggle poly vs mono w/ ~
         if (!e.shiftKey) {
             polyphonic = !polyphonic;
@@ -25,7 +25,7 @@ var keydown = function(e) {
     }
 
     // tab to change wave type
-    if (e.which === 9) {
+    if (e.which === keys.TAB) {
         var allPossibleWaveTypes = Osci.fn.getAllPossibleWaveTypes();
         waveType = allPossibleWaveTypes[allPossibleWaveTypes.indexOf(waveType) + 1]
             || allPossibleWaveTypes[0];
@@ -34,9 +34,9 @@ var keydown = function(e) {
     }
 
     var changeInOctave = 0;
-    if (e.which === 38) {
+    if (e.which === keys.UP) {
         changeInOctave = 1;
-    } else if (e.which === 40) {
+    } else if (e.which === keys.DOWN) {
         changeInOctave = -1;
     }
     octave += changeInOctave;
@@ -97,7 +97,7 @@ var keyup = function(e) {
     }
 
     // e.shiftKey is apparently unreliable for keyUp
-    if (e.which === 16) {
+    if (e.which === keys.SHIFT) {
         oscis.changeOctave(-1);
     }
 }
