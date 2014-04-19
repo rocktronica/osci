@@ -15,6 +15,7 @@
 - poly gliss from closest stillPressed instead of lastPressed
 
 ## meh
+
 - OscisCollection
     - storage should be an object, not array
-    - less method redundancy
+- more succinct bound functions

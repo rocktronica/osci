@@ -102,6 +102,7 @@ var OscisCollection = (function() {
 
     klass.fn.setAt = function(i, osci) {
         this.oscis[i] = osci;
+        return this;
     };
 
     klass.fn.deleteAt = function(i) {
@@ -116,24 +117,28 @@ var OscisCollection = (function() {
         return this;
     };
 
-    klass.fn.setWaveType = function(waveType) {
-        this.forEach(function(osci) {
-            osci.setWaveType(waveType);
-        });
-        return this;
-    };
-
     klass.fn.clear = function() {
         this.forEach(function(osci, index) {
             this.deleteAt(index);
         }.bind(this));
+        return this;
     }
 
-    klass.fn.changeOctave = function(change) {
-        this.forEach(function(osci) {
-            osci.changeOctave(change);
-        });
-    }
+    var duplicateMethods = [
+        "setWaveType",
+        "changeOctave"
+    ];
+
+    duplicateMethods.forEach(function(duplicateMethod) {
+        klass.fn[duplicateMethod] = function() {
+            var args = arguments;
+            this.forEach(function(osci) {
+                osci[duplicateMethod].apply(osci, args);
+            });
+            return this;
+        };
+        return this;
+    })
 
     return klass;
 }());
