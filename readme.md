@@ -16,6 +16,5 @@
 
 ## meh
 
-- OscisCollection
-    - storage should be an object, not array
 - more succinct bound functions
+- key constants instead of whiches

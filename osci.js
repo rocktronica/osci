@@ -91,35 +91,35 @@ var Osci = (function(){
 
 var OscisCollection = (function() {
     var klass = function() {
-        this.oscis = [];
+        this.oscis = {};
     }
 
     klass.fn = klass.prototype;
 
-    klass.fn.at = function(i) {
-        return this.oscis[i];
+    klass.fn.at = function(key) {
+        return this.oscis[key];
     }
 
-    klass.fn.setAt = function(i, osci) {
-        this.oscis[i] = osci;
+    klass.fn.setAt = function(key, osci) {
+        this.oscis[key] = osci;
         return this;
     };
 
-    klass.fn.deleteAt = function(i) {
-        this.oscis[i].stop();
-        delete this.oscis[i];
+    klass.fn.deleteAt = function(key) {
+        this.at(key).stop();
+        delete this.oscis[key];
     }
 
     klass.fn.forEach = function(fn) {
-        this.oscis.forEach(function(osci, index) {
-            fn.bind(osci)(osci, index);
-        })
+        for (key in this.oscis) {
+            fn.apply(this, [this.oscis[key], key]);
+        }
         return this;
     };
 
     klass.fn.clear = function() {
-        this.forEach(function(osci, index) {
-            this.deleteAt(index);
+        this.forEach(function(osci, key) {
+            this.deleteAt(key);
         }.bind(this));
         return this;
     }
