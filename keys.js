@@ -50,6 +50,7 @@ var Keys = (function() {
     }
 
     klass.fn.down = function(which) {
+        this.lastPressed = which;
         if (!this.isPressed(which)) {
             this.pressed.push(which);
         }
@@ -65,8 +66,12 @@ var Keys = (function() {
         return this.pressed.indexOf(which) !== -1;
     }
 
-    klass.fn.last = function() {
+    klass.fn.lastStillPressed = function() {
         return this.pressed[this.pressed.length - 1];
+    }
+
+    klass.fn.getLastPressed = function() {
+        return this.lastPressed;
     }
 
     return klass;

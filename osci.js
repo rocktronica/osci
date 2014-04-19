@@ -11,6 +11,10 @@ var Osci = (function(){
         this.oscillator.start(0);
 
         this.setWaveType(options.waveType || klass.fn.defaultWaveType);
+
+        if (options.setFrequency) {
+            this.setFrequency(options.setFrequency);
+        }
     }
 
     var possibleWaveTypes = ["sine", "square", "sawtooth", "triangle"];
@@ -36,8 +40,18 @@ var Osci = (function(){
         this.setFrequency(frequency);
         return this;
     };
-    klass.fn.setFrequency = function(frequency) {
+    klass.fn.setFrequency = function(frequency, delay) {
+        delay = delay || 0;
+
+        if (delay) {
+            setTimeout(function() {
+                this.setFrequency(frequency);
+            }.bind(this), delay);
+            return this;
+        }
+
         this.value = this.oscillator.frequency.value = frequency;
+        return this;
     }
     klass.fn.getFrequency = function() {
         return this.value;
@@ -54,6 +68,7 @@ var Osci = (function(){
                 this.setFrequency(this.getFrequency() / 2);
             }
         }
+        return this;
     }
 
     klass.fn.play = function() {

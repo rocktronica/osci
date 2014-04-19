@@ -2,6 +2,7 @@ var octave = 4;
 var waveType = Osci.defaultWaveType;
 
 var polyphonic = true,
+    polyphonicGlissando = false,
     oscis = [];
 
 var frequencies = new Frequencies();
@@ -10,16 +11,20 @@ var keys = new Keys();
 var keydown = function(e) {
     if (e.repeat) { return; }
 
-    keys.down(e.which);
-
-    // Toggle poly vs mono w/ ~
     if (e.which === 192) {
-        polyphonic = !polyphonic;
+        // Toggle poly vs mono w/ ~
+        if (!e.shiftKey) {
+            polyphonic = !polyphonic;
 
-        oscis.forEach(function(osci, oscisIndex) {
-            osci.stop();
-            delete oscis[oscisIndex];
-        });
+            oscis.forEach(function(osci, oscisIndex) {
+                osci.stop();
+                delete oscis[oscisIndex];
+            });
+
+        // Toggle poly glissando with `
+        } else {
+            polyphonicGlissando = !polyphonicGlissando;
+        }
 
         return;
     }
@@ -50,15 +55,29 @@ var keydown = function(e) {
         oscis[oscisIndex] = oscis[oscisIndex] || new Osci({
             waveType: waveType
         });
-        oscis[oscisIndex].playFrequency(
-            frequencies.at(octave * 12 + keys.noteIndexAtKey(e.which))
-        );
+
+        var delay = 0;
+        if (polyphonicGlissando && keys.getLastPressed()) {
+            oscis[oscisIndex].setFrequency(
+                frequencies.at(octave * 12 + keys.noteIndexAtKey(keys.getLastPressed()))
+            );
+            delay = 10;
+        }
+
+        oscis[oscisIndex]
+            .setFrequency(
+                frequencies.at(octave * 12 + keys.noteIndexAtKey(e.which)),
+                delay
+            )
+            .play();
     }
 
     if (e.shiftKey) { changeInOctave = 1; }
     if (changeInOctave) {
         oscis.forEach(function(osci) { osci.changeOctave(changeInOctave); });
     }
+
+    keys.down(e.which);
 };
 
 var keyup = function(e) {
@@ -73,7 +92,7 @@ var keyup = function(e) {
             osci.stop();
             delete oscis[oscisIndex];
         } else {
-            var lastPressedKey = keys.last();
+            var lastPressedKey = keys.lastStillPressed();
 
             if (lastPressedKey) {
                 oscis[oscisIndex].playFrequency(
