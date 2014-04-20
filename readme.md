@@ -7,7 +7,6 @@
 - pitch bend
 - esc: panic mute
 - space: add octave down?
-- fade to fix sine clip
 
 ## bugs
 

@@ -4,12 +4,20 @@ var Osci = (function(){
     var klass = function(options) {
         options = options || {};
 
-        this.isConnected = false;
+        this.isAudible = false;
         this.value; // oscillator.frequency.value may round
 
         this.oscillator = context.createOscillator();
         this.oscillator.start(0);
 
+        this.gainNode = context.createGain();
+
+        // Oscillator -> Gain
+        this.oscillator.connect(this.gainNode);
+        // Gain -> Speakers
+        this.gainNode.connect(context.destination);
+
+        this.mute();
         this.setWaveType(options.waveType || klass.fn.defaultWaveType);
 
         if (options.setFrequency) {
@@ -71,17 +79,25 @@ var Osci = (function(){
         return this;
     }
 
+    klass.fn.setGain = function(gain) {
+        this.gainNode.gain.value = gain;
+    }
+
+    klass.fn.mute = function() {
+        this.setGain(0);
+    }
+
     klass.fn.play = function() {
-        if (!this.isConnected) {
-            this.oscillator.connect(context.destination);
-            this.isConnected = true;
+        if (!this.isAudible) {
+            this.setGain(1);
+            this.isAudible = true;
         }
         return this;
     };
     klass.fn.stop = function() {
-        if (this.isConnected) {
-            this.oscillator.disconnect(context.destination);
-            this.isConnected = false;
+        if (this.isAudible) {
+            this.setGain(0);
+            this.isAudible = false;
         }
         return this;
     };
