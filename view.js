@@ -11,6 +11,13 @@
 
     exports.oscis = oscis;
 
+    var changeWaveType = function() {
+        var allPossibleWaveTypes = Osci.fn.getAllPossibleWaveTypes();
+        waveType = allPossibleWaveTypes[allPossibleWaveTypes.indexOf(waveType) + 1]
+            || allPossibleWaveTypes[0];
+        oscis.setWaveType(waveType);
+    }
+
     var keydown = function(e) {
         if (e.repeat) { return; }
 
@@ -29,10 +36,7 @@
 
         // tab to change wave type
         if (e.which === keys.TAB) {
-            var allPossibleWaveTypes = Osci.fn.getAllPossibleWaveTypes();
-            waveType = allPossibleWaveTypes[allPossibleWaveTypes.indexOf(waveType) + 1]
-                || allPossibleWaveTypes[0];
-            oscis.setWaveType(waveType);
+            changeWaveType();
             e.preventDefault();
         }
 
