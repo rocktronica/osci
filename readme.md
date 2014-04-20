@@ -6,6 +6,7 @@
 - matching perceived volumes across wave types
 - pitch bend
 - esc: panic mute
+- mute on tab leave
 - space: add octave down?
 
 ## bugs

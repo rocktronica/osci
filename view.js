@@ -16,6 +16,7 @@
         waveType = allPossibleWaveTypes[allPossibleWaveTypes.indexOf(waveType) + 1]
             || allPossibleWaveTypes[0];
         oscis.setWaveType(waveType);
+        console.log(waveType);
     }
 
     var keydown = function(e) {

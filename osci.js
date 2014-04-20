@@ -33,7 +33,7 @@ var Osci = (function(){
         // this.oscillator.type takes an int but turns into a string...
         this.oscillator.type = possibleWaveTypes.indexOf(waveType.toLowerCase())
             || this.oscillator.type;
-        return this;
+        return this.setWaveTypeAppropriateGain();
     };
     klass.fn.getWaveType = function() {
         return this.oscillator.type;
@@ -81,15 +81,27 @@ var Osci = (function(){
 
     klass.fn.setGain = function(gain) {
         this.gainNode.gain.value = gain;
+        return this;
     }
 
     klass.fn.mute = function() {
         this.setGain(0);
+        return this;
+    }
+
+    klass.fn.setWaveTypeAppropriateGain = function() {
+        this.setGain({
+            sine: 1,
+            square: .3,
+            sawtooth: .5,
+            triangle: .9
+        }[this.getWaveType()]);
+        return this;
     }
 
     klass.fn.play = function() {
         if (!this.isAudible) {
-            this.setGain(1);
+            this.setWaveTypeAppropriateGain();
             this.isAudible = true;
         }
         return this;
