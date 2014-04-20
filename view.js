@@ -110,6 +110,13 @@
         }
     }
 
+    var visibilityChange = function(e) {
+        if (document.hidden) {
+            oscis.clear();
+        }
+    }
+
     document.addEventListener("keydown", keydown);
     document.addEventListener("keyup", keyup);
+    document.addEventListener("visibilitychange", visibilityChange);
 }(this));

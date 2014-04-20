@@ -3,7 +3,6 @@
 ## todo
 
 - esc: panic mute
-- mute on tab leave
 - space: temp mute
 
 ## bugs
