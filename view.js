@@ -78,6 +78,10 @@
             oscis.changeOctave(changeInOctave);
         }
 
+        if (e.which === 27) {
+            oscis.clear();
+        }
+
         keys.down(e.which);
     };
 

@@ -2,7 +2,6 @@
 
 ## todo
 
-- esc: panic mute
 - space: temp mute
 
 ## bugs
