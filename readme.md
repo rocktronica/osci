@@ -2,12 +2,9 @@
 
 ## todo
 
-- custom/togglable glissando
-- matching perceived volumes across wave types
-- pitch bend
 - esc: panic mute
 - mute on tab leave
-- space: add octave down?
+- space: temp mute
 
 ## bugs
 
@@ -16,7 +13,7 @@
 
 ## meh
 
-- poly gliss  from closest stillPressed instead of lastPressed
+- poly gliss from closest stillPressed instead of lastPressed
 
 ## refactoring
 
@@ -26,7 +23,10 @@
     - rows should be in view
         - can eventWhich be determined programatically?
 - poly gliss timeOut stuff is weak...
+    - delay node?
 
 ## whoa
 
 - corrigan
+- custom/togglable glissando
+- pitch bend

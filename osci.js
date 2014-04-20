@@ -1,5 +1,6 @@
 var Osci = (function(){
-    var context = new webkitAudioContext();
+    var AudioContext = AudioContext || webkitAudioContext;
+    var context = new AudioContext();
 
     var klass = function(options) {
         options = options || {};
