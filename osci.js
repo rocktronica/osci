@@ -153,21 +153,21 @@ var OscisCollection = (function() {
         return this;
     }
 
-    var duplicateMethods = [
+    var duplicateOscillatorMethods = [
         "setWaveType",
         "changeOctave"
     ];
 
-    duplicateMethods.forEach(function(duplicateMethod) {
-        klass.fn[duplicateMethod] = function() {
+    duplicateOscillatorMethods.forEach(function(duplicateOscillatorMethod) {
+        klass.fn[duplicateOscillatorMethod] = function() {
             var args = arguments;
             this.forEach(function(osci) {
-                osci[duplicateMethod].apply(osci, args);
+                osci[duplicateOscillatorMethod].apply(osci, args);
             });
             return this;
         };
         return this;
-    })
+    });
 
     return klass;
 }());

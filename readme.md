@@ -2,7 +2,9 @@
 
 ## todo
 
-- space: temp mute
+- temp mute
+- sustain
+- reset
 
 ## bugs
 
@@ -15,16 +17,22 @@
 
 ## refactoring
 
-- keys event handling
+- synth
+- synth view
+    - keys event handling
 - more succinct bound functions
 - flesh out key constants
     - rows should be in view
         - can eventWhich be determined programatically?
 - poly gliss timeOut stuff is weak...
     - delay node?
+- require.js
 
 ## whoa
 
 - corrigan
 - custom/togglable glissando
 - pitch bend
+- filters
+- moog combined wavetypes
+- oscillator
