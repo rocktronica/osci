@@ -1,6 +1,5 @@
 var Osci = (function(){
-    var AudioContext = AudioContext || webkitAudioContext;
-    var context = new AudioContext();
+    var context = new (AudioContext || webkitAudioContext)();
 
     var klass = function(options) {
         options = options || {};
@@ -31,9 +30,7 @@ var Osci = (function(){
     klass.fn = klass.prototype;
     klass.fn.defaultWaveType = "square";
     klass.fn.setWaveType = function(waveType) {
-        // this.oscillator.type takes an int but turns into a string...
-        this.oscillator.type = possibleWaveTypes.indexOf(waveType.toLowerCase())
-            || this.oscillator.type;
+        this.oscillator.type = waveType;
         return this.setWaveTypeAppropriateGain();
     };
     klass.fn.getWaveType = function() {
